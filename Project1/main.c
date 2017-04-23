@@ -3,7 +3,7 @@
 //
 // DESARROLLADO POR:
 // Nombre, carnet
-// Nombre, carnet
+// Harold González, 201213646
 // Michael Stiven Osorio Riaño, 201616273
 
 #define _CRT_SECURE_NO_DEPRECATE 
@@ -122,15 +122,47 @@ void insertarMensaje(Imagen * img, unsigned char mensaje[], int n) {
 	int i;
 	unsigned char componenteColor;
 	unsigned char byteMensaje;
+	char *arreglo=byteMensaje;
 
 	for (y = 0; y < ancho; y++) {
 		for (x = 0; x < alto; x++) {
+			
 			int pos = y * alto + x;
+			*arreglo=partirMensaje(mensaje, n);
 			componenteColor = img->informacion[pos];
-			for(int i =0; i < )
-			byteMensaje = mensaje	
+			if (pos == 255) {
+					
+
+			}
+			
 		}
 	}
+	
+}
+
+/**
+*Metodo que divide un mensaje en en numero de bits que le entran por parametro.
+*parametro mensaje apuntador a una cadena de caracteres con el mensaje.
+*parametro n cantidad de bits en al que se debe dividir el mensaje.
+*Retorna el mensaje dividido.
+*/
+unsigned char partirMensaje(unsigned char mensaje[], int n) {
+
+	char *msj;
+	unsigned char guardado[]=0;
+	msj = &guardado;
+	int contador = 0;
+
+	for (int i = 0; i < mensaje; i++) {
+		contador += i;
+		while (i != 0) {
+			if (contador == n) {
+				msj = mensaje[i];
+			}
+		}
+	}
+
+	return guardado;
 	
 }
 
