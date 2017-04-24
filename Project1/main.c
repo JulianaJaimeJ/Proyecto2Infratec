@@ -1,15 +1,15 @@
 // isis1304-111-proyecto2.cpp: define el punto de entrada de la aplicaci�n de consola.
-
+// Se recuerda a los estudiantes que el proyecto debe ser desarrollado obligatoriamente en grupos de 3.
+//
 // DESARROLLADO POR:
-// Nombre, carnet 
-// Harold Gonzalez, 201213646
-// Juliana Jaime, 201224513
+// Nombre, carnet
+// Nombre, carnet
+// Michael Stiven Osorio Ria�o, 201616273
 
-#define _CRT_SECURE_NO_WARNINGS
+#define _CRT_SECURE_NO_DEPRECATE 
 #include "stdlib.h" 
 #include "stdio.h"
 #include "string.h"
-#include "conio.h"
 
 // La representacion de la imagen
 typedef struct img
@@ -20,7 +20,7 @@ typedef struct img
 } Imagen;
 
 
-// Funci�n que carga el bmp en la estructura Imagen
+// Funcion que carga el bmp en la estructura Imagen
 void cargarBMP24(Imagen * imagen, char * nomArchivoEntrada);
 
 // Funcion que guarda el contenido de la estructura imagen en un archivo binario
@@ -36,19 +36,21 @@ unsigned char sacarNbits(char mensaje[], int bitPos, int n);
 
 // Programa principal
 // NO MODIFICAR
-int main(int argc, char* argv[])
-{
+int main(int argc, char* argv[]) {
+
+	printf("el tama�o de un short (entero corto), es: %d\n", sizeof(short));
+	printf("el tama�o de la umagen es: %d\n", sizeof(Imagen));
+
 	Imagen *img = (Imagen *)malloc(sizeof(Imagen));
 	char msg[10000];
-	char op;
+	char op[2];
 	int num;
 	int l;
 	int i;
 	int n;
 	char nomArch1[256] = "";
 
-	if (argc != 2)
-	{
+	if (argc != 2) {
 		printf("Faltan argumentos - Debe ser un archivo\n");
 		system("pause");
 		return -1;
@@ -61,10 +63,9 @@ int main(int argc, char* argv[])
 
 	printf("Indique la accion\n\t1) insertar mensaje\n\t2) leer mensaje\n\n");
 
-	op = _getch();
+	gets(op);
 
-	if (op == '1')
-	{
+	if (op[0] == '1') {
 		printf("ingrese el mensaje a insertar\n");
 
 		gets(msg);
@@ -81,8 +82,7 @@ int main(int argc, char* argv[])
 
 		printf("mensaje insertado\n");
 	}
-	else if (op == '2')
-	{
+	else if (op[0] == '2') {
 		printf("ingrese la longitud del mensaje insertado\n");
 
 		scanf("%d", &l);
@@ -90,8 +90,7 @@ int main(int argc, char* argv[])
 		printf("ingrese el numero de bits por Byte\n");
 		scanf("%d", &n);
 
-		for (i = 0; i<l; i++)
-		{
+		for (i = 0; i<l; i++) {
 			msg[i] = 0;
 		}
 
@@ -101,8 +100,7 @@ int main(int argc, char* argv[])
 
 		printf("el mensaje es: %s\n", msg);
 	}
-	else
-	{
+	else {
 		printf("%s", "Hubo un error al cargar el archivo\n");
 	}
 	system("pause");
@@ -115,134 +113,26 @@ int main(int argc, char* argv[])
 * parametro mensaje Apuntador a una cadena de caracteres con el mensaje.
 * parametro n Cantidad de bits del mensaje que se almacenar�n en cada componente de color de cada pixel. 0 < n <= 8.
 */
-void insertarMensaje(Imagen * img, unsigned char mensaje[], int n)
-{
-	
-	//Representa bits que no pudieron agruparse en un bloque
-	int res = 0;
-
-	//Representa indice del recorrido del mensaje a insertar
-	int x;
-
-	//Representa posicion actual en la que se agrega
-	int pos = 0;
-
-	//Representa indice del recorrido caracter del mensaje
+void insertarMensaje(Imagen * img, unsigned char mensaje[], int n) {
+	//TODO  Desarrollar completo en C
+	int alto = img->alto;
+	int ancho = img->ancho;
 	int y;
-		
-	
-	//Representa cantidad max de bloques por cada pixel recorrido.
-	int blocks = 8 / n;
+	int x;
+	int i;
+	unsigned char componenteColor;
+	unsigned char byteMensaje;
 
-	//Representa cantidad bits del caracter actual a unir con bits residuo caracter anterior
-	int paste;
-
-	//Representa pixel donde se inserta el bit
-	unsigned char carMod;
-
-	//Representa caracter actual
-	unsigned char  carAct;
-
-	//Cadena de caracteres que guardan pixeles para insercion de bits
-	unsigned char * listPix = img->informacion;
-
-	//Representa caracter auxiliar con informacion del caracter actual
-	unsigned char carAux;
-
-	//Representa caracter anterior al actual
-	unsigned char carAnt;
-
-	//Representa caracter auxiliar con informacion del caracter anterior
-	unsigned char carAux2;
-
-
-	//Recorrido para extraer bloques
-	for (x = 0; x < strlen(reinterpret_cast<const char*>(mensaje)); x++)
-	{
-		carAct = mensaje[x];
-
-
-		if (res == 0)
-		{
-			for (y = 0; y < blocks; y++)
-			{
-				carAux = carAct;
-				carAux = carAux << (n*y);
-				carAux = carAux >> 8 - n;
-				carMod = listPix[pos];
-				carMod = carMod >> n;
-				carMod = carMod << n;
-				carMod = carMod | carAux;
-				listPix[pos] = carMod;
-				pos++;
-			}
-
-			//Recalcular residuo
-			res = 8 % n;
-		}
-
-		else
-		{
-
-			//Pegar bits residuo caracter anterior con bits faltantes del bloque actual
-			
-			paste = n - res;
-			carAux = carAct;
-
-			carAnt = mensaje[x - 1];
-			carAnt = carAnt << 8 - res;
-			carAnt = carAnt >> 8 - res;
-			carAnt = carAnt << paste;
-			carAux = carAux >> 8 - paste;
-			carAux = (carAnt | carAux);
-			carMod = listPix[pos];
-			carMod = carMod >> n;
-			carMod = carMod << n;
-			carMod = carMod | carAux;
-			listPix[pos] = carMod;
-			pos++;
-
-			//Recalcular Residuo
-			res = (8 + res) % n;
-
-			//Mira si hay bits restantes para armar un nuevo bloque
-			if (8 - paste >= n)
-			{
-				for (y = 0; y < blocks; y++)
-				{
-					carAux = carAct;
-					carAux = carAux << (paste)+(n*y);
-					carAux = carAux >> 8 - n;
-					carMod = listPix[pos];
-					carMod = carMod >> n;
-					carMod = carMod << n;
-					carMod = carMod | carAux;
-					listPix[pos] = carMod;
-					pos++;
-				}
-			}
-
-
-			if (x == (strlen(reinterpret_cast<const char*>(mensaje)) - 1) && res != 0)
-			{
-				paste = n - res;
-				carAux = carAct;
-				carAux = carAux << 8 - res;
-				carAux = carAux >> 8 - res;
-				carAux = carAux << paste;
-				carMod = listPix[pos];
-				carMod = carMod >> n;
-				carMod = carMod << n;
-				carMod = carMod | carAux;
-				listPix[pos] = carMod;
-				pos++;
-			}
-
+	for (y = 0; y < ancho; y++) {
+		for (x = 0; x < alto; x++) {
+			int pos = y * alto + x;
+			componenteColor = img->informacion[pos];
+			for(int i =0; i < )
+			byteMensaje = mensaje	
 		}
 	}
+	
 }
-
-
 
 /**
 * Extrae un mensaje de tama�o l, guardado de a n bits por componente de color, de la imagen apuntada por img
@@ -251,104 +141,13 @@ void insertarMensaje(Imagen * img, unsigned char mensaje[], int n)
 * parametro l Tama�o en bytes del mensaje almacenado en la imagen.
 * parametro n Cantidad de bits del mensaje que se almacenan en cada componente de color de cada pixel. 0 < n <= 8.
 */
-void leerMensaje(Imagen * img, unsigned char msg[], int l, int n)
-{
-
-	//Pixeles de la imagen
-	unsigned char * pixeles = img->informacion;
-
-	//Pixel actual
-	unsigned char pActual;
-
-	//Guarda informacion pixel actual
-	unsigned char pAux;
-		
-
-	//Representa cantidad bits leidos por byte !>8
-	int readBits = 0;
-
-	//Representa cantidad bits por leer de un byte 
-	int restBits = 0;
-
-	
-	//Representa indice recorrido a trav�s de pixeles de la imagen por parametro
+void leerMensaje(Imagen * img, unsigned char msg[], int l, int n) {
+	int alto = img->alto;
+	int ancho = img->ancho;
+	int y;
 	int x;
+	int i;
 	
-
-	//Posicion caracter actual mensaje a leer
-	int caracterActual = 0;
-
-	//Pixel anterior al actual
-	unsigned char pAnterior;
-
-	//Representa caracter donde se agregan bits leidos
-	unsigned char bitsAgregados = '\0';
-
-
-	//Recorrido de la imagen
-	for (x = 0; x < (l * 10); x++)
-	{
-		//hay residuo?
-
-		if (restBits == 0)
-		{
-			
-			pActual = pixeles[x];
-			pAux = pActual << (8 - n);
-			pAux = pAux >> readBits;
-			bitsAgregados = (bitsAgregados | pAux);
-			readBits += n;
-		}
-
-		else
-		{
-			//agregar a la lista lo que falto por leer
-
-			if (readBits == 0)
-			{				 
-				pAnterior = pixeles[x - 1];
-				pAnterior = pAnterior << 8 - restBits;
-				bitsAgregados = (bitsAgregados | pAnterior);
-				readBits += restBits;
-			}
-
-
-			//leer bits pixel actual
-
-			pActual = pixeles[x];
-			pAux = pActual << (8 - n);
-			pAux = pAux >> readBits;
-			bitsAgregados = (bitsAgregados | pAux);
-			readBits += n;
-		}
-
-		
-		if (readBits == 8)
-		{
-			msg[caracterActual] = bitsAgregados;
-			caracterActual++;
-			bitsAgregados = '\0';
-			readBits = 0;
-			restBits = 0;
-
-		}
-
-		else if (readBits > 8)
-		{
-			msg[caracterActual] = bitsAgregados;
-			caracterActual++;
-			bitsAgregados = '\0';
-			restBits = readBits - 8;
-			readBits = 0;
-		}
-
-		if (caracterActual == (l - 1))
-		{
-			break;
-		}
-
-	}
-
 }
 
 /**
@@ -359,23 +158,13 @@ void leerMensaje(Imagen * img, unsigned char msg[], int l, int n)
 * parametro bitpos Posici�n del bit desde donde se extraer�n los bits. 0 <= n < 8*longitud de la secuencia
 * retorno Los n bits solicitados almacenados en los bits menos significativos de un unsigned char
 */
-unsigned char sacarNbits(unsigned char secuencia[], int bitpos, int n)
-{
-	//posicion bits secuencia
-	int posBits = bitpos / 8;
-
-	unsigned char bytesSacados = secuencia[posBits];
-	bytesSacados = bytesSacados << n;
-	bytesSacados = bytesSacados >> n;
-
-	return bytesSacados;
-	
+unsigned char sacarNbits(unsigned char secuencia[], int bitpos, int n) {
+	//TODO [Opcional Sugerido] Desarrollar completo en C
 }
 
 // Lee un archivo en formato BMP y lo almacena en la estructura img
 // NO MODIFICAR
-void cargarBMP24(Imagen * imagen, char * nomArchivoEntrada)
-{
+void cargarBMP24(Imagen * imagen, char * nomArchivoEntrada) {
 	// bmpDataOffset almacena la posici�n inicial de los datos de la imagen. Las otras almacenan el alto y el ancho
 	// en pixeles respectivamente
 	int bmpDataOffset, bmpHeight, bmpWidth;
@@ -385,8 +174,7 @@ void cargarBMP24(Imagen * imagen, char * nomArchivoEntrada)
 
 	FILE *bitmapFile;
 	bitmapFile = fopen(nomArchivoEntrada, "rb");
-	if (bitmapFile == NULL)
-	{
+	if (bitmapFile == NULL) {
 		printf("No ha sido posible cargar el archivo: %s\n", nomArchivoEntrada);
 		exit(-1);
 	}
@@ -409,14 +197,11 @@ void cargarBMP24(Imagen * imagen, char * nomArchivoEntrada)
 
 	fseek(bitmapFile, bmpDataOffset, SEEK_SET); // Se ubica el puntero del archivo al comienzo de los datos
 
-	for (y = 0; y < bmpHeight; y++)
-	{
-		for (x = 0; x < bmpWidth; x++)
-		{
+	for (y = 0; y < bmpHeight; y++) {
+		for (x = 0; x < bmpWidth; x++) {
 			int pos = y * bmpWidth + x;
 			fread(&imagen->informacion[pos], sizeof(unsigned char), 1, bitmapFile);
 		}
-
 		fseek(bitmapFile, residuo, SEEK_CUR); // Se omite el residuo en los datos
 	}
 	fclose(bitmapFile);
@@ -425,8 +210,8 @@ void cargarBMP24(Imagen * imagen, char * nomArchivoEntrada)
 // Esta funcion se encarga de guardar una estructura de Imagen con formato de 24 bits (formato destino) en un archivo binario
 // con formato BMP de Windows.
 // NO MODIFICAR
-void guardarBMP24(Imagen * imagen, char * nomArchivoSalida)
-{
+void guardarBMP24(Imagen * imagen, char * nomArchivoSalida) {
+
 	unsigned char bfType[2];
 	unsigned int bfSize, bfReserved, bfOffBits, biSize, biWidth, biHeight, biCompression, biSizeImage, biXPelsPerMeter, biYPelsPerMeter, biClrUsed, biClrImportant;
 	unsigned short biPlanes, biBitCount;
@@ -456,8 +241,7 @@ void guardarBMP24(Imagen * imagen, char * nomArchivoSalida)
 	biClrImportant = 0;  // Numero de colores importantes (solo para bitmaps con paleta)	
 
 	archivoSalida = fopen(nomArchivoSalida, "w+b"); // Archivo donde se va a escribir el bitmap
-	if (archivoSalida == 0)
-	{
+	if (archivoSalida == 0) {
 		printf("No ha sido posible crear el archivo: %s\n", nomArchivoSalida);
 		exit(-1);
 	}
@@ -479,14 +263,11 @@ void guardarBMP24(Imagen * imagen, char * nomArchivoSalida)
 	fwrite(&biClrImportant, sizeof(int), 1, archivoSalida);
 
 	// Se escriben en el archivo los datos RGB de la imagen.
-	for (y = 0; y < imagen->alto; y++)
-	{
-		for (x = 0; x < imagen->ancho; x++)
-		{
+	for (y = 0; y < imagen->alto; y++) {
+		for (x = 0; x < imagen->ancho; x++) {
 			int pos = y * imagen->ancho + x;
 			fwrite(&imagen->informacion[pos], sizeof(unsigned char), 1, archivoSalida);
 		}
-
 		fwrite(&relleno, sizeof(unsigned char), residuo, archivoSalida);
 	}
 	fclose(archivoSalida);
