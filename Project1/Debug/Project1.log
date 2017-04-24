@@ -1,8 +1,0 @@
-﻿  main.c
-c:\users\stive\documents\visual studio 2017\projects\project1\project1\main.c(65): warning C4013: 'gets' sin definir; se supone que extern devuelve como resultado int
-c:\users\stive\documents\visual studio 2017\projects\project1\project1\main.c(115): warning C4028: parámetro formal 2 distinto de la declaración
-c:\users\stive\documents\visual studio 2017\projects\project1\project1\main.c(128): warning C4028: parámetro formal 2 distinto de la declaración
-c:\users\stive\documents\visual studio 2017\projects\project1\project1\main.c(140): warning C4028: parámetro formal 1 distinto de la declaración
-c:\users\stive\documents\visual studio 2017\projects\project1\project1\main.c(142): warning C4716: 'sacarNbits': debe devolver un valor
-  Project1.vcxproj -> C:\Users\stive\Documents\Visual Studio 2017\Projects\Project1\Debug\Project1.exe
-  Project1.vcxproj -> C:\Users\stive\Documents\Visual Studio 2017\Projects\Project1\Debug\Project1.pdb (Partial PDB)
