@@ -1,7 +1,7 @@
 // isis1304-111-proyecto2.cpp: define el punto de entrada de la aplicaci�n de consola.
 
 // DESARROLLADO POR:
-// Nombre, carnet 
+// Michael Osorio,  201616273
 // Harold Gonzalez, 201213646
 // Juliana Jaime, 201224513
 
