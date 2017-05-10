@@ -242,7 +242,35 @@ void insertarMensaje(Imagen * img, unsigned char mensaje[], int n)
 	}
 }
 
+/**
+ * Inserta un mensaje, de a n bits por componente de color, en la imagen apuntada por img
+ * parametro img Apuntador a una imagen en cuyos pixeles se almacenará el mensaje.
+ * parametro mensaje Apuntador a una cadena de caracteres con el mensaje.
+ * parametro n Cantidad de bits del mensaje que se almacenarán en cada componente de color de cada pixel. 0 < n <= 8.
+ */
+// ESCRIBIR EN ENSAMBLADOR, *NO* SE PUEDEN USAR NOMBRES SIMBOLICOS
+void insertarMensaje(Imagen * img , char mensaje[], int n) {
+    __asm 
+	{
+		push ebp
+			mov ebp, esp
 
+    }
+}
+
+/**
+ * Extrae un mensaje de tama–o l, guardado de a n bits por componente de color, de la imagen apuntada por img
+ * parametro img Apuntador a una imagen que tiene almacenado el mensaje en sus pixeles.
+ * parametro msg Apuntador a una cadena de caracteres donde se depositará el mensaje.
+ * parametro l Tama–o en bytes del mensaje almacenado en la imagen.
+ * parametro n Cantidad de bits del mensaje que se almacenan en cada componente de color de cada pixel. 0 < n <= 8.
+ */
+// ESCRIBIR EN ENSAMBLADOR, SE PUEDEN USAR NOMBRES SIMBOLICOS
+void leerMensaje(Imagen * img, char msg[], int l, int n) {
+    __asm {
+        
+    }
+}
 
 /**
 * Extrae un mensaje de tama�o l, guardado de a n bits por componente de color, de la imagen apuntada por img
@@ -490,4 +518,22 @@ void guardarBMP24(Imagen * imagen, char * nomArchivoSalida)
 		fwrite(&relleno, sizeof(unsigned char), residuo, archivoSalida);
 	}
 	fclose(archivoSalida);
+}
+
+/**
+ * Identifica la opci—n ingresada y realiza las acciones que debe hacer el programa.
+ * Ver el enunciado.
+ */
+// ESCRIBIR EN ENSAMBLADOR, SE PUEDEN USAR NOMBRES SIMBOLICOS
+void decidir(char nomArch1[], char op, int bitsPorByte, char msg[], Imagen * img) {
+    __asm 
+	{
+		cmp op, 
+			je leer
+			jmp escribir
+	leer:
+		call leerMensaje
+	escribir: 
+		call escribirMesaje
+    }
 }
